@@ -115,7 +115,12 @@ while True:
             imprimir_menu(opciones_submenu_lista_ordenada)
             sub_opcion = seleccionar_opcion(opciones_submenu_lista_ordenada)
             match sub_opcion:
-                case 1:
+                case 1: # Orden ascendente
+                    lista_ascendente_edad = sorted(lista, key = lambda i : i.edad, reverse = False)
+                    imprimir_lista(lista_ascendente_edad)
+                case 2: # Orden descendente
+                    lista_descendente_edad = sorted(lista, key = lambda j : j.edad, reverse = True)
+                    imprimir_lista(lista_descendente_edad)
                        
         case 3:
             pass
