@@ -108,7 +108,13 @@ def existe_email(lista, email):
         if email == lista[indice].email:
             email_encontrado = True
             break
-    return email_encontrado, indice
+    return email_encontrado
+
+# Función que busca el índice del elemento de una lista de usuarios que coincide con el email dado. El email debe existir en la lista.
+def indice_email(lista, email):
+    for indice in range(len(lista)):
+        if email == lista[indice].email:
+            return indice
 
 # Función para buscar un usuario por medio de un email. Toma como entrada una lista de usuarios
 # Devuelve el índice de la lista donde se encuentra el usuario. Si no hay ningún usuario con el email introducido, devuelve -1.
@@ -124,14 +130,17 @@ def buscar_usuario_por_email(lista):
         else:
             print("\nEmail no válido. ¿Seguro que has introducido el email correctamente?. Por favor, vuelva a intentarlo.")
             continue
-    for indice in range(len(lista)):
-        if email_a_buscar == lista[indice].email:
-            email_encontrado = True
-            index = indice
-            break
+    if existe_email(lista,email_a_buscar):
+        return indice_email(lista,email_a_buscar)
+    #for indice in range(len(lista)):
+    #    if email_a_buscar == lista[indice].email:
+    #        email_encontrado = True
+    #        index = indice
+    #        break
     if email_encontrado == False:
         print("\nEl email introducido no se encuentra en la lista de usuarios.\n")
     return index
+
 # Función para añadir un nuevo usuario a la lista. Los datos se introducen desde la consola.
                
 
