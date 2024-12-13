@@ -16,9 +16,11 @@ class Usuario:
     def __str__(self):
         return f"Nombre: {self.nombre}, Email: {self.email}, Edad: {self.edad}, Altura: {self.altura}, Estudiante: {self.estudiante}"
                
-# Función para imprimir un menú
-def imprimir_menu():
-    opciones_menu = (
+""" Se crean las opciones del menú principal en una tupla (ya que, en principio, no se van a alterar los elementos del menú).
+Si es preciso, para facilitar el mantenimiento, y por si posteriormente se desea añadir, modificar o eliminar alguna,
+se puede modificar la tupla a nivel de código.
+"""
+opciones_menu_principal = (
         "1 - Imprimir todos los usuarios de la lista",
         "2 - Imprimir todos los usuarios ordenados por edad",
         "3 - Imprimir un usuario por su email",
@@ -27,17 +29,37 @@ def imprimir_menu():
         "6 - Borrar usuario por su email",
         "7 - Borrar todos los usuarios",
         "8 - Salir"
-    ) # Se crean las opciones en una tupla (ya que, en principio, no se van a alterar los elementos del menú). Si es preciso, para facilitar el mantenimiento, y por si posteriormente se desea añadir, modificar o eliminar alguna, se puede modificar la tupla a nivel de código.
+    )
+
+# Función para imprimir un menú
+def imprimir_menu_(lista_opciones):
+    
     print("-----MENU DE PRINCIPAL-----")
-    for opcion in opciones_menu:
+    for opcion in lista_opciones:
         print(opcion)
     print("\n", "\n")
 
-# Función para el tratamiento de la opción seleccionada
-def seleccionar_opcion():
-    opcion = input("Por favor, seleccione una de las opciones indicadas arriba, tecleando el número correspondiente y pulsando 'Enter': ")
+# Función para el tratamiento de la opción seleccionada. Toma como entrada una lista de opciones y devuelve un entero.
+def seleccionar_opcion(lista_opciones):
+    valido = False
+    while not valido:
+        try:
+            opcion = int(input("Por favor, seleccione una de las opciones indicadas arriba, tecleando el número correspondiente y pulsando 'Enter': ").strip())
+        except ValueError:
+            print("No ha introducido un número entero. Por favor, inténtelo de nuevo.","\n")
+        except:
+            print("Entrada no válida. Por favor, inténtelo de nuevo.","\n")
+        else:
+            if opcion > len(lista_opciones):
+                print(f"El número introducido no forma parte de las opciones disponibles. Por favor, introduzca un número entre 1 y {len(lista_opciones)}")
+            else:
+                valido = True
+    return opcion
+
+        
+    
  
-# Función para crear ina lista de usuarios inicial
+# Función para crear ina lista de usuarios inicial. Devuelve una lista de elementos de tipo Usuario
 def crear_lista_inicial():   
     # Se definen los usuarios de base.
     user1 = Usuario("Jose", "jose@nttdata.com", 49, 1.83, True)
@@ -74,9 +96,29 @@ def imprimir_lista(lista):
 
 lista = crear_lista_inicial()
 imprimir_lista(lista)
-imprimir_menu()
-seleccionar_opcion()
+imprimir_menu_(opciones_menu_principal)
 
+while True:
+    option = seleccionar_opcion(opciones_menu_principal)
+    match option:
+        case 1:
+            imprimir_lista(lista)
+        case 2:
+            pass
+        case 3:
+            pass
+        case 4:
+            pass
+        case 5:
+            pass
+        case 6:
+            pass
+        case 7:
+            pass
+        case 8:
+            print ("Hasta pronto.")
+            break
+        
 
     
 
