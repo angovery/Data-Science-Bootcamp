@@ -56,7 +56,7 @@ def seleccionar_opcion(lista_opciones):
         except ValueError:
             print("No ha introducido un número entero. Por favor, inténtelo de nuevo.","\n")
         except:
-            print("Entrada no válida. Por favor, inténtelo de nuevo.","\n")
+            print("Se ha producido un error. Por favor, inténtelo de nuevo.","\n")
         else:
             if opcion > len(lista_opciones)-1:
                 print(f"El número introducido no forma parte de las opciones disponibles. Por favor, introduzca un número entre 1 y {len(lista_opciones)-1}")
@@ -96,11 +96,24 @@ def imprimir_lista(lista):
             print(elemento_lista)
     print("\n")
 
-# Función para buscar un usuario por medio de un atributo. Toma como entrada una lista de usuarios y un atributo.
-def buscar_usuario_por_atributo(lista, atributo, valor_atributo_buscar):
+# Función para buscar un usuario por medio de un email. Toma como entrada una lista de usuarios y un email. Sólo considera válido el email si se ha incluido una '@'. No se hace ningún otro tipo de validación.
+def buscar_usuario_por_email(lista):
+    email_valido = False
+    while email_valido == False:
+        email_a_buscar = input("\nIntroduzca el email el usuario que desea buscar: ").strip().lower()
+        if "@" in email_a_buscar:
+            print("\nEmail válido\n")
+            email_valido = True
+        else:
+            print("\nEmail no válido. ¿Seguro que has introducido el email correctamente?. Por favor, vuelva a intentarlo.")
+            continue
     for user in lista:
-        if user.atributo == valor_atributo_buscar:
-            print(user)
+        if email_a_buscar == user.email.lower():
+            print(user, "\n")
+            break
+        else:
+            print("No se ha encontrado el email introducido en la lista", "\n")
+            return
                
 
 # Función para buscar un elemento de una lista de objetos de tipo Usuario, dado un email.
@@ -140,8 +153,8 @@ while True:
                     print ("\n", "Hasta pronto.", "\n")
                     break
                        
-        case 3: #
-            pass
+        case 3: # Buscar usuario por email
+            buscar_usuario_por_email(lista)
         case 4:
             pass
         case 5:
