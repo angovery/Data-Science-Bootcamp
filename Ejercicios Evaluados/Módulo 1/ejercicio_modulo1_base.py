@@ -21,7 +21,7 @@ Si es preciso, para facilitar el mantenimiento, y por si posteriormente se desea
 se puede modificar la tupla a nivel de código. El primer elemento de la lista indica el tipo de menú.
 """
 opciones_menu_principal = (
-        "-----MENU DE PRINCIPAL-----",
+        "-----MENU DE PRINCIPAL-----\n",
         "1 - Imprimir todos los usuarios de la lista",
         "2 - Imprimir todos los usuarios ordenados por edad",
         "3 - Imprimir un usuario por su email",
@@ -34,7 +34,7 @@ opciones_menu_principal = (
 
 # Opciones posibles del submenú de la opción 2 del menú principal, Imprimir lista ordenada
 opciones_submenu_lista_ordenada = (
-    "-----OPCIONES DE ORDENACIÓN-----",
+    "-----OPCIONES DE ORDENACIÓN-----\n",
     "1 - Ascendente",
     "2 - Descendente",
     "3 - Volver al Menú Principal",
@@ -87,7 +87,7 @@ usuarios = [
     Usuario("Borja", "borjae@microsoft.com", "51", "1.67", False)    
 ]
 """
-# Función para imprimir una lista cuyos elementos son de tipo Usuario (valdría igualmente cualquier tipo de elemento).
+# Función para imprimir una lista cuyos elementos son de tipo Usuario (valdría igualmente cualquier tipo de elemento). La lista debe existir.
 def imprimir_lista(lista):
     if not lista:
         print("Lista vacía. No se puede imprimir")
@@ -95,6 +95,18 @@ def imprimir_lista(lista):
         for elemento_lista in lista:
             print(elemento_lista)
     print("\n")
+
+# Función para buscar un usuario por medio de un atributo. Toma como entrada una lista de usuarios y un atributo.
+def buscar_usuario_por_atributo(lista, atributo, valor_atributo_buscar):
+    for user in lista:
+        if user.atributo == valor_atributo_buscar:
+            print(user)
+               
+
+# Función para buscar un elemento de una lista de objetos de tipo Usuario, dado un email.
+# def buscar_por_email (lista):
+#   email_a_buscar = input 
+
 
 # Función para ordenar una lista, en base a una clave, ya sea de forma ascendente o descendente
 # def ordenar_lista(lista, clave, orden):
@@ -109,20 +121,26 @@ imprimir_menu(opciones_menu_principal)
 while True:
     option = seleccionar_opcion(opciones_menu_principal)
     match option:
-        case 1:
+        case 1: # Imprimir todos los usuarios de la lista.
             imprimir_lista(lista)
-        case 2:
+            
+        case 2: # Imprimir los usuarios ordenados por edad, ascendente o descendentemente.
             imprimir_menu(opciones_submenu_lista_ordenada)
             sub_opcion = seleccionar_opcion(opciones_submenu_lista_ordenada)
             match sub_opcion:
                 case 1: # Orden ascendente
-                    lista_ascendente_edad = sorted(lista, key = lambda i : i.edad, reverse = False)
+                    lista_ascendente_edad = sorted(lista, key = lambda asc : asc.edad, reverse = False)
                     imprimir_lista(lista_ascendente_edad)
                 case 2: # Orden descendente
-                    lista_descendente_edad = sorted(lista, key = lambda j : j.edad, reverse = True)
+                    lista_descendente_edad = sorted(lista, key = lambda desc : desc.edad, reverse = True)
                     imprimir_lista(lista_descendente_edad)
+                case 3: # Volver al menu principal
+                    pass
+                case 4: # Salir
+                    print ("\n", "Hasta pronto.", "\n")
+                    break
                        
-        case 3:
+        case 3: #
             pass
         case 4:
             pass
@@ -133,9 +151,10 @@ while True:
         case 7:
             pass
         case 8:
-            print ("Hasta pronto.")
+            print ("\n", "Hasta pronto.", "\n")
             break
-        
+    imprimir_menu(opciones_menu_principal)
+
 
     
 
