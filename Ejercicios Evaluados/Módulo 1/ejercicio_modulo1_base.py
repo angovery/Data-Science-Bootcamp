@@ -96,24 +96,30 @@ def imprimir_lista(lista):
             print(elemento_lista)
     print("\n")
 
-# Función para buscar un usuario por medio de un email. Toma como entrada una lista de usuarios y un email. Sólo considera válido el email si se ha incluido una '@'. No se hace ningún otro tipo de validación.
+# Función para buscar un usuario por medio de un email. Toma como entrada una lista de usuarios
+# Sólo considera válido el email si se ha incluido una '@'. No se hace ningún otro tipo de validación.
+# Devuelve el índice de la lista donde se encuentra el usuario. Si no hay ningún usuario con el email introducido, devuelve False.
 def buscar_usuario_por_email(lista):
+    index = -1
     email_valido = False
+    email_encontrado = False
     while email_valido == False:
-        email_a_buscar = input("\nIntroduzca el email el usuario que desea buscar: ").strip().lower()
+        email_a_buscar = input("\nIntroduzca el email del usuario que desea buscar: ").strip().lower()
         if "@" in email_a_buscar:
-            print("\nEmail válido\n")
             email_valido = True
+            break
         else:
             print("\nEmail no válido. ¿Seguro que has introducido el email correctamente?. Por favor, vuelva a intentarlo.")
             continue
-    for user in lista:
-        if email_a_buscar == user.email.lower():
-            print(user, "\n")
+    for indice in range(len(lista)):
+        if email_a_buscar == lista[indice].email:
+            email_encontrado = True
+            index = indice
             break
-        else:
-            print("No se ha encontrado el email introducido en la lista", "\n")
-            return
+    if email_encontrado == False:
+        print("\nEl email introducido no se encuentra en la lista de usuarios.\n")
+    return index
+# Función para añadir un nuevo usuario a la lista. Los datos se introducen desde la consola.
                
 
 # Función para buscar un elemento de una lista de objetos de tipo Usuario, dado un email.
@@ -154,7 +160,9 @@ while True:
                     break
                        
         case 3: # Buscar usuario por email
-            buscar_usuario_por_email(lista)
+            indice = buscar_usuario_por_email(lista)
+            if indice != -1:
+                print(lista[indice])
         case 4:
             pass
         case 5:
