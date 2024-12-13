@@ -96,16 +96,21 @@ def imprimir_lista(lista):
             print(elemento_lista)
     print("\n")
 
-# Función para buscar un usuario por medio de un email. Toma como entrada una lista de usuarios
+# Función que valida si un email tiene el formato correcto.
 # Sólo considera válido el email si se ha incluido una '@'. No se hace ningún otro tipo de validación.
-# Devuelve el índice de la lista donde se encuentra el usuario. Si no hay ningún usuario con el email introducido, devuelve False.
+def email_valido(email):
+    return ("@" in email)
+
+# Función para buscar un usuario por medio de un email. Toma como entrada una lista de usuarios
+# Devuelve el índice de la lista donde se encuentra el usuario. Si no hay ningún usuario con el email introducido, devuelve -1.
 def buscar_usuario_por_email(lista):
     index = -1
+    email_vale = False
     email_valido = False
     email_encontrado = False
     while email_valido == False:
         email_a_buscar = input("\nIntroduzca el email del usuario que desea buscar: ").strip().lower()
-        if "@" in email_a_buscar:
+        if "@" in (email_a_buscar):
             email_valido = True
             break
         else:
@@ -157,8 +162,7 @@ while True:
                     pass
                 case 4: # Salir
                     print ("\n", "Hasta pronto.", "\n")
-                    break
-                       
+                    break                     
         case 3: # Buscar usuario por email
             indice = buscar_usuario_por_email(lista)
             if indice != -1:
