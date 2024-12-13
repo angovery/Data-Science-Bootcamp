@@ -18,9 +18,10 @@ class Usuario:
                
 """ Se crean las opciones del menú principal en una tupla (ya que, en principio, no se van a alterar los elementos del menú).
 Si es preciso, para facilitar el mantenimiento, y por si posteriormente se desea añadir, modificar o eliminar alguna,
-se puede modificar la tupla a nivel de código.
+se puede modificar la tupla a nivel de código. El primer elemento de la lista indica el tipo de menú.
 """
 opciones_menu_principal = (
+        "-----MENU DE PRINCIPAL-----",
         "1 - Imprimir todos los usuarios de la lista",
         "2 - Imprimir todos los usuarios ordenados por edad",
         "3 - Imprimir un usuario por su email",
@@ -31,10 +32,17 @@ opciones_menu_principal = (
         "8 - Salir"
     )
 
+# Opciones posibles del submenú de la opción 2 del menú principal, Imprimir lista ordenada
+opciones_submenu_lista_ordenada = (
+    "-----OPCIONES DE ORDENACIÓN-----",
+    "1 - Ascendente",
+    "2 - Descendente",
+    "3 - Volver al Menú Principal",
+    "4 - Salir"
+)
+
 # Función para imprimir un menú
-def imprimir_menu_(lista_opciones):
-    
-    print("-----MENU DE PRINCIPAL-----")
+def imprimir_menu(lista_opciones):
     for opcion in lista_opciones:
         print(opcion)
     print("\n", "\n")
@@ -50,8 +58,8 @@ def seleccionar_opcion(lista_opciones):
         except:
             print("Entrada no válida. Por favor, inténtelo de nuevo.","\n")
         else:
-            if opcion > len(lista_opciones):
-                print(f"El número introducido no forma parte de las opciones disponibles. Por favor, introduzca un número entre 1 y {len(lista_opciones)}")
+            if opcion > len(lista_opciones)-1:
+                print(f"El número introducido no forma parte de las opciones disponibles. Por favor, introduzca un número entre 1 y {len(lista_opciones)-1}")
             else:
                 valido = True
     return opcion
@@ -96,7 +104,7 @@ def imprimir_lista(lista):
 
 lista = crear_lista_inicial()
 imprimir_lista(lista)
-imprimir_menu_(opciones_menu_principal)
+imprimir_menu(opciones_menu_principal)
 
 while True:
     option = seleccionar_opcion(opciones_menu_principal)
@@ -104,7 +112,11 @@ while True:
         case 1:
             imprimir_lista(lista)
         case 2:
-            pass
+            imprimir_menu(opciones_submenu_lista_ordenada)
+            sub_opcion = seleccionar_opcion(opciones_submenu_lista_ordenada)
+            match sub_opcion:
+                case 1:
+                       
         case 3:
             pass
         case 4:
