@@ -139,6 +139,16 @@ def buscar_usuario_por_email(lista):
         print("\nEl email introducido no se encuentra en la lista de usuarios.\n")
     return index
 
+# Función para validar la entrada de si un usuario es estudiante o no. Se introduce por conasola "True" o "False" y sde devuelve el correspondiente booleano.
+def es_estudiante(): 
+    dato_valido = False
+    while dato_valido == False:
+        estudiante = input("\nIntroduzca 'True' si el nuevo usuario es estudiante, o 'False' si no lo es: ").strip().capitalize()
+        if estudiante == "True" or estudiante == "False":
+            return bool(estudiante)
+        else:
+            print('\nPor favor, introduzca sólamente "True" o "False"')
+            
 # Función para añadir un nuevo usuario a la lista. Los datos se introducen desde la consola. El usuario no debe estar ya incluido en la lista.
 def incluir_usuario(lista):
     new_user = Usuario()
@@ -174,20 +184,34 @@ while True:
                     print ("\n", "Hasta pronto.", "\n")
                     break                     
         case 3: # Buscar usuario por email
-            indice = buscar_usuario_por_email(lista) # Se introduce un email, por consola.
-            if indice != -1: # Ya existe un usuario con el email introducido
-                print(lista[indice])
+            indice_3 = buscar_usuario_por_email(lista) # Se introduce un email, por consola.
+            if indice_3 != -1: # Ya existe un usuario con el email introducido
+                print(lista[indice_3])
                 
         case 4:
-            #indice = buscar_usuario_por_email(lista) # Se introduce un email, por consola.
-            #if indice != -1: # Ya existe un usuario con el email introducido
-            #    print("Ya existe un usuario en la lista con el email introducido.")
-            #else: # En la lista, no existe ningún usuario con el email introducido. Luego se puede crear un nuevo usuario.
-            #    pass
-            #email = input("Introduzca el email del nuevo usuario").strip().lower()
-            #if email_vale(email):
-            #    if buscar_usuario_por_email(lista)
-            pass
+            new_email = introducir_email()
+            if existe_email(lista, new_email): 
+                print("\nYa existe un usuario en la lista con el email introducido.") # Ya existe un usuario con el email introducido
+            else: # En la lista, no existe ningún usuario con el email introducido. Luego se puede crear un nuevo usuario.
+                dato_valido = False
+                while dato_valido == False:
+                    try:
+                        new_nombre = input("\nIntroduzca el nombre del nuevo usuario: ").strip().lower()
+                        new_edad = int(input("\nIntroduzca la edad del nuevo usuario: ")) # Pendiente comprobar que los caracteres introducidos se puedan transformar a entero.
+                        new_altura = float(input("\nIntroduzca la altura del nuevo usuario, en metros. Por favor, utilice el punto decimal: ")) # Pendiente comprobar que los caracteres introducidos se puedan transformar a flotante.
+                        new_estudiante = es_estudiante()
+                        # bool(input("\nIntroduzca 'True' si el nuevo usuario es estudiante, o 'False' si no lo es: ").strip().capitalize())
+                    except ValueError:
+                        print("\nEl valor introducido no es un número." )
+                    else:
+                        dato_valido = True
+                
+                print(ord("0"))
+                print(ord("9"))
+                new_user = Usuario(new_nombre, new_email, new_edad, new_altura, new_estudiante)
+                print(new_user)
+                lista.append(new_user)
+                
         case 5:
             pass
         case 6:
