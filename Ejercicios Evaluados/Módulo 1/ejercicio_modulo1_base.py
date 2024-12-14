@@ -99,9 +99,7 @@ def imprimir_lista(lista):
 def email_validar_formato(email):
     return ("@" in email)
 
-# Función 
-
-# Función que comprueba si existe un email en una lista de elementos de tipo Usuario.
+# Función que comprueba si existe un email en una lista de elementos de tipo Usuario. El email ha de tener un formato correcto.
 def existe_email(lista, email):
     email_encontrado = False
     for indice in range(len(lista)):
@@ -110,18 +108,15 @@ def existe_email(lista, email):
             break
     return email_encontrado
 
-# Función que busca el índice del elemento de una lista de usuarios que coincide con el email dado. El email debe existir en la lista.
+# Función que busca el índice del elemento de una lista de usuarios que coincide con el email dado. El email debe existir en la lista y tener un formato correcto.
 def indice_email(lista, email):
     for indice in range(len(lista)):
         if email == lista[indice].email:
             return indice
 
-# Función para buscar un usuario por medio de un email. Toma como entrada una lista de usuarios
-# Devuelve el índice de la lista donde se encuentra el usuario. Si no hay ningún usuario con el email introducido, devuelve -1.
-def buscar_usuario_por_email(lista):
-    index = -1
+# Función que permite introducir, por consola, un email válido. Devuelve una cadena string con el formato de email validado.
+def introducir_email():
     email_valido = False
-    email_encontrado = False
     while email_valido == False:
         email_a_buscar = input("\nIntroduzca el email del usuario que desea buscar: ").strip().lower()
         if email_validar_formato(email_a_buscar):
@@ -130,13 +125,16 @@ def buscar_usuario_por_email(lista):
         else:
             print("\nEmail no válido. ¿Seguro que has introducido el email correctamente?. Por favor, vuelva a intentarlo.")
             continue
+    return email_a_buscar  
+
+# Función para buscar un usuario por medio de un email. Toma como entrada una lista de usuarios
+# Devuelve el índice de la lista donde se encuentra el usuario. Si no hay ningún usuario con el email introducido, devuelve -1.
+def buscar_usuario_por_email(lista):
+    index = -1
+    email_encontrado = False
+    email_a_buscar = introducir_email()
     if existe_email(lista,email_a_buscar):
         return indice_email(lista,email_a_buscar)
-    #for indice in range(len(lista)):
-    #    if email_a_buscar == lista[indice].email:
-    #        email_encontrado = True
-    #        index = indice
-    #        break
     if email_encontrado == False:
         print("\nEl email introducido no se encuentra en la lista de usuarios.\n")
     return index
@@ -146,17 +144,7 @@ def incluir_usuario(lista):
     new_user = Usuario()
     email = input("\nIntroduzca el email del usuario que desea buscar: ").strip().lower()
     if email_validar_formato(email):
-        new_user.email = email
-    
-
-# Función para buscar un elemento de una lista de objetos de tipo Usuario, dado un email.
-# def buscar_por_email (lista):
-#   email_a_buscar = input 
-
-
-# Función para ordenar una lista, en base a una clave, ya sea de forma ascendente o descendente
-# def ordenar_lista(lista, clave, orden):
-    
+        new_user.email = email 
 
 # ---------- BLOQUE PRINCIPAL DEL PROGRAMA ----------
 
