@@ -21,7 +21,7 @@ Si es preciso, para facilitar el mantenimiento, y por si posteriormente se desea
 se puede modificar la tupla a nivel de código. El primer elemento de la lista indica el tipo de menú.
 """
 opciones_menu_principal = (
-        "-----MENU DE PRINCIPAL-----\n",
+        "\n-----MENU DE PRINCIPAL-----\n",
         "1 - Imprimir todos los usuarios de la lista",
         "2 - Imprimir todos los usuarios ordenados por edad",
         "3 - Imprimir un usuario por su email",
@@ -34,7 +34,7 @@ opciones_menu_principal = (
 
 # Opciones posibles del submenú de la opción 2 del menú principal, Imprimir lista ordenada
 opciones_submenu_lista_ordenada = (
-    "-----OPCIONES DE ORDENACIÓN-----\n",
+    "\n-----OPCIONES DE ORDENACIÓN-----\n",
     "1 - Ascendente",
     "2 - Descendente",
     "3 - Volver al Menú Principal",
@@ -63,10 +63,7 @@ def seleccionar_opcion(lista_opciones):
             else:
                 valido = True
     return opcion
-
-        
     
- 
 # Función para crear ina lista de usuarios inicial. Devuelve una lista de elementos de tipo Usuario
 def crear_lista_inicial():   
     # Se definen los usuarios de base.
@@ -89,6 +86,7 @@ usuarios = [
 """
 # Función para imprimir una lista cuyos elementos son de tipo Usuario (valdría igualmente cualquier tipo de elemento). La lista debe existir.
 def imprimir_lista(lista):
+    print("\n")
     if not lista:
         print("Lista vacía. No se puede imprimir")
     else:
@@ -98,8 +96,10 @@ def imprimir_lista(lista):
 
 # Función que valida si un email tiene el formato correcto.
 # Sólo considera válido el email si se ha incluido una '@'. No se hace ningún otro tipo de validación.
-def email_formato_valido(email):
+def email_validar_formato(email):
     return ("@" in email)
+
+# Función 
 
 # Función que comprueba si existe un email en una lista de elementos de tipo Usuario.
 def existe_email(lista, email):
@@ -124,7 +124,7 @@ def buscar_usuario_por_email(lista):
     email_encontrado = False
     while email_valido == False:
         email_a_buscar = input("\nIntroduzca el email del usuario que desea buscar: ").strip().lower()
-        if email_formato_valido(email_a_buscar):
+        if email_validar_formato(email_a_buscar):
             email_valido = True
             break
         else:
@@ -141,8 +141,13 @@ def buscar_usuario_por_email(lista):
         print("\nEl email introducido no se encuentra en la lista de usuarios.\n")
     return index
 
-# Función para añadir un nuevo usuario a la lista. Los datos se introducen desde la consola.
-               
+# Función para añadir un nuevo usuario a la lista. Los datos se introducen desde la consola. El usuario no debe estar ya incluido en la lista.
+def incluir_usuario(lista):
+    new_user = Usuario()
+    email = input("\nIntroduzca el email del usuario que desea buscar: ").strip().lower()
+    if email_validar_formato(email):
+        new_user.email = email
+    
 
 # Función para buscar un elemento de una lista de objetos de tipo Usuario, dado un email.
 # def buscar_por_email (lista):
@@ -181,10 +186,16 @@ while True:
                     print ("\n", "Hasta pronto.", "\n")
                     break                     
         case 3: # Buscar usuario por email
-            indice = buscar_usuario_por_email(lista)
-            if indice != -1:
+            indice = buscar_usuario_por_email(lista) # Se introduce un email, por consola.
+            if indice != -1: # Ya existe un usuario con el email introducido
                 print(lista[indice])
+                
         case 4:
+            #indice = buscar_usuario_por_email(lista) # Se introduce un email, por consola.
+            #if indice != -1: # Ya existe un usuario con el email introducido
+            #    print("Ya existe un usuario en la lista con el email introducido.")
+            #else: # En la lista, no existe ningún usuario con el email introducido. Luego se puede crear un nuevo usuario.
+            #    pass
             #email = input("Introduzca el email del nuevo usuario").strip().lower()
             #if email_vale(email):
             #    if buscar_usuario_por_email(lista)
