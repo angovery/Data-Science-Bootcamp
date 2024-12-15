@@ -129,10 +129,9 @@ def introducir_email():
 
 # Función para buscar un usuario por medio de un email. Toma como entrada una lista de usuarios
 # Devuelve el índice de la lista donde se encuentra el usuario. Si no hay ningún usuario con el email introducido, devuelve -1.
-def buscar_usuario_por_email(lista):
+def buscar_usuario_por_email(lista, email_a_buscar):
     index = -1
     email_encontrado = False
-    email_a_buscar = introducir_email()
     if existe_email(lista,email_a_buscar):
         return indice_email(lista,email_a_buscar)
     if email_encontrado == False:
@@ -187,7 +186,41 @@ def imprimir_usuarios_ordenados_edad(lista_users, opciones_submenu):
         case 4: # Salir
             print ("\n", "Hasta pronto.", "\n")
             exit()  
-    
+
+# Función para imprimir los datos de un usuario, a partir de su email. El email se intruduce por consola.    
+def imprimir_usuario_por_email(lista):
+    email_buscar = introducir_email()
+    indice_3 = buscar_usuario_por_email(lista, email_buscar) # Se introduce un email, por consola.
+    if indice_3 != -1: # Ya existe un usuario con el email introducido
+        print(lista[indice_3])
+
+# Función para actualizar los datos de un usuario. Dado que se utiliza el email como clave única, el email no puede modificarse. En caso de actualizarse el email, se deberá eliminar el usuario en cuestión y crear un nuevo usuario con los datos actualizados.
+def actualizar_usuario(lista):
+    update_email = introducir_email()
+    if existe_email(lista, update_email) == False: # No existe ningún usuario con el email introducido.
+        print("\nEl email introducido no se corresponde con ningún usuario de la lista. No es posible actualizar los datos.")
+        # exit()
+    else: # El email introducido corresponde a un usuario contenido en la lista.
+        indice_5 = buscar_usuario_por_email(lista, update_email)
+        print(indice_5)
+        print("\nEstos son los datos actuales del usuario seleccionado:\n")
+        print(lista[indice_5], "\n")
+        print("Introduzca los nuevos datos del usuario: \n")
+        dato_valido = False
+        while dato_valido == False:
+            try:
+                update_nombre = input("\nIntroduzca el nombre del nuevo usuario: ").strip().lower()
+                update_edad = int(input("\nIntroduzca la edad del nuevo usuario: ")) # Pendiente comprobar que los caracteres introducidos se puedan transformar a entero.
+                update_altura = float(input("\nIntroduzca la altura del nuevo usuario, en metros. Por favor, utilice el punto decimal: ")) # Pendiente comprobar que los caracteres introducidos se puedan transformar a flotante.
+                update_estudiante = introducir_estudiante()
+            except ValueError:
+                print("\nEl valor introducido no es un número válido." )
+            else:
+                dato_valido = True
+        update_user = Usuario(update_nombre, update_email, update_edad, update_altura, update_estudiante)
+        lista.pop(indice_5)
+        lista.insert(indice_5, update_user)
+        print("\nDatos actualizados correctamente.\n")
 
 # ---------- BLOQUE PRINCIPAL DEL PROGRAMA ----------
 
@@ -205,31 +238,23 @@ while True:
             imprimir_usuarios_ordenados_edad(lista, opciones_submenu_lista_ordenada)
                 
         case 3: # Buscar usuario por email
-            indice_3 = buscar_usuario_por_email(lista) # Se introduce un email, por consola.
-            if indice_3 != -1: # Ya existe un usuario con el email introducido
-                print(lista[indice_3])
+            imprimir_usuario_por_email(lista)
                 
         case 4: # Crea un nuevo usuario y se añade a la lista
             incluir_usuario(lista)
                             
-        case 5: # Actualizar datos de un usuario existente
-            """ update_email = introducir_email()
-            if existe_email(lista, update_email) == False: # No existe ningún usuario con el email introducido.
-                print("\nEl email introducido no se corresponde con ningún usuario de la lista. No es posible actualizar los datos.")
-                # exit()
-            else: # El email introducido corresponde a un usuario contenido en la lista.
-                indice_5 = buscar_usuario_por_email(lista)
-                print(indice_5)
-                print(f"\nEstos son los datos actuales del usuario seleccionado:\n {print(lista[indice_5])}") """
-                
+        case 5: # Actualizar datos de un usuario existente. Dado que se utiliza el email como clave única, el email no puede modificarse. En caso de actualizarse el email, se deberá eliminar el usuario en cuestión y crear un nuevo usuario con los datos actualizados.
+            actualizar_usuario(lista)
         
         case 6:
             pass
         case 7:
             pass
+        
         case 8:
             print ("\n", "Hasta pronto.", "\n")
             break
+
     imprimir_menu(opciones_menu_principal)
 
 
