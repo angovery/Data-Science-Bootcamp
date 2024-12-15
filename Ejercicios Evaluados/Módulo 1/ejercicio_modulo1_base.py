@@ -118,7 +118,7 @@ def indice_email(lista, email):
 def introducir_email():
     email_valido = False
     while email_valido == False:
-        email_a_buscar = input("\nIntroduzca el email del usuario que desea buscar: ").strip().lower()
+        email_a_buscar = input("\nIntroduzca el email del usuario: ").strip().lower()
         if email_validar_formato(email_a_buscar):
             email_valido = True
             break
@@ -140,21 +140,54 @@ def buscar_usuario_por_email(lista):
     return index
 
 # Función para validar la entrada de si un usuario es estudiante o no. Se introduce por conasola "True" o "False" y sde devuelve el correspondiente booleano.
-def es_estudiante(): 
+def introducir_estudiante(): 
     dato_valido = False
     while dato_valido == False:
         estudiante = input("\nIntroduzca 'True' si el nuevo usuario es estudiante, o 'False' si no lo es: ").strip().capitalize()
-        if estudiante == "True" or estudiante == "False":
-            return bool(estudiante)
+        if estudiante == "True":
+            return True
+        elif estudiante == "False":
+            return False
         else:
             print('\nPor favor, introduzca sólamente "True" o "False"')
             
 # Función para añadir un nuevo usuario a la lista. Los datos se introducen desde la consola. El usuario no debe estar ya incluido en la lista.
 def incluir_usuario(lista):
-    new_user = Usuario()
-    email = input("\nIntroduzca el email del usuario que desea buscar: ").strip().lower()
-    if email_validar_formato(email):
-        new_user.email = email 
+    new_email = introducir_email()
+    if existe_email(lista, new_email): 
+        print("\nYa existe un usuario en la lista con el email introducido.") # Ya existe un usuario con el email introducido
+    else: # En la lista, no existe ningún usuario con el email introducido. Luego se puede crear un nuevo usuario.
+        dato_valido = False
+        while dato_valido == False:
+            try:
+                new_nombre = input("\nIntroduzca el nombre del nuevo usuario: ").strip().lower()
+                new_edad = int(input("\nIntroduzca la edad del nuevo usuario: ")) # Pendiente comprobar que los caracteres introducidos se puedan transformar a entero.
+                new_altura = float(input("\nIntroduzca la altura del nuevo usuario, en metros. Por favor, utilice el punto decimal: ")) # Pendiente comprobar que los caracteres introducidos se puedan transformar a flotante.
+                new_estudiante = introducir_estudiante()
+            except ValueError:
+                print("\nEl valor introducido no es un número válido." )
+            else:
+                dato_valido = True
+        new_user = Usuario(new_nombre, new_email, new_edad, new_altura, new_estudiante)
+        lista.append(new_user)
+
+# Función que imprime los usuarios de una lista, ordenados por edad de menor a mayor o viceversa. Toma como entrada una lista de elementos de tipo usuario y una lista de opciones de un submenu de elección ASC o DESC.
+def imprimir_usuarios_ordenados_edad(lista_users, opciones_submenu):
+    imprimir_menu(opciones_submenu)
+    sub_opcion = seleccionar_opcion(opciones_submenu)
+    match sub_opcion:
+        case 1: # Orden ascendente
+            lista_ascendente_edad = sorted(lista_users, key = lambda asc : asc.edad, reverse = False)
+            imprimir_lista(lista_ascendente_edad)
+        case 2: # Orden descendente
+            lista_descendente_edad = sorted(lista_users, key = lambda desc : desc.edad, reverse = True)
+            imprimir_lista(lista_descendente_edad)
+        case 3: # Volver al menu principal
+            pass
+        case 4: # Salir
+            print ("\n", "Hasta pronto.", "\n")
+            exit()  
+    
 
 # ---------- BLOQUE PRINCIPAL DEL PROGRAMA ----------
 
@@ -169,51 +202,27 @@ while True:
             imprimir_lista(lista)
             
         case 2: # Imprimir los usuarios ordenados por edad, ascendente o descendentemente.
-            imprimir_menu(opciones_submenu_lista_ordenada)
-            sub_opcion = seleccionar_opcion(opciones_submenu_lista_ordenada)
-            match sub_opcion:
-                case 1: # Orden ascendente
-                    lista_ascendente_edad = sorted(lista, key = lambda asc : asc.edad, reverse = False)
-                    imprimir_lista(lista_ascendente_edad)
-                case 2: # Orden descendente
-                    lista_descendente_edad = sorted(lista, key = lambda desc : desc.edad, reverse = True)
-                    imprimir_lista(lista_descendente_edad)
-                case 3: # Volver al menu principal
-                    pass
-                case 4: # Salir
-                    print ("\n", "Hasta pronto.", "\n")
-                    break                     
+            imprimir_usuarios_ordenados_edad(lista, opciones_submenu_lista_ordenada)
+                
         case 3: # Buscar usuario por email
             indice_3 = buscar_usuario_por_email(lista) # Se introduce un email, por consola.
             if indice_3 != -1: # Ya existe un usuario con el email introducido
                 print(lista[indice_3])
                 
-        case 4:
-            new_email = introducir_email()
-            if existe_email(lista, new_email): 
-                print("\nYa existe un usuario en la lista con el email introducido.") # Ya existe un usuario con el email introducido
-            else: # En la lista, no existe ningún usuario con el email introducido. Luego se puede crear un nuevo usuario.
-                dato_valido = False
-                while dato_valido == False:
-                    try:
-                        new_nombre = input("\nIntroduzca el nombre del nuevo usuario: ").strip().lower()
-                        new_edad = int(input("\nIntroduzca la edad del nuevo usuario: ")) # Pendiente comprobar que los caracteres introducidos se puedan transformar a entero.
-                        new_altura = float(input("\nIntroduzca la altura del nuevo usuario, en metros. Por favor, utilice el punto decimal: ")) # Pendiente comprobar que los caracteres introducidos se puedan transformar a flotante.
-                        new_estudiante = es_estudiante()
-                        # bool(input("\nIntroduzca 'True' si el nuevo usuario es estudiante, o 'False' si no lo es: ").strip().capitalize())
-                    except ValueError:
-                        print("\nEl valor introducido no es un número." )
-                    else:
-                        dato_valido = True
+        case 4: # Crea un nuevo usuario y se añade a la lista
+            incluir_usuario(lista)
+                            
+        case 5: # Actualizar datos de un usuario existente
+            """ update_email = introducir_email()
+            if existe_email(lista, update_email) == False: # No existe ningún usuario con el email introducido.
+                print("\nEl email introducido no se corresponde con ningún usuario de la lista. No es posible actualizar los datos.")
+                # exit()
+            else: # El email introducido corresponde a un usuario contenido en la lista.
+                indice_5 = buscar_usuario_por_email(lista)
+                print(indice_5)
+                print(f"\nEstos son los datos actuales del usuario seleccionado:\n {print(lista[indice_5])}") """
                 
-                print(ord("0"))
-                print(ord("9"))
-                new_user = Usuario(new_nombre, new_email, new_edad, new_altura, new_estudiante)
-                print(new_user)
-                lista.append(new_user)
-                
-        case 5:
-            pass
+        
         case 6:
             pass
         case 7:
