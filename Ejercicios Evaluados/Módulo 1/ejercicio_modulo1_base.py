@@ -41,6 +41,14 @@ opciones_submenu_lista_ordenada = (
     "4 - Salir"
 )
 
+# Opciones posibles del submenú de la opción 7 del menú principal, Eliminar la lista completa
+opciones_submenu_eliminar_lista = (
+    "\n-----OPCIONES DE ELIMINACIÓN DE LISTA-----\n",
+    "1 - Sí, eliminar la lista completa.",
+    "2 - No. Mantener la lista completa y volver al Menú Principal",
+    "3 - Salir"
+)
+
 # Función para imprimir un menú
 def imprimir_menu(lista_opciones):
     for opcion in lista_opciones:
@@ -151,7 +159,7 @@ def introducir_estudiante():
             print('\nPor favor, introduzca sólamente "True" o "False"')
             
 # Función para añadir un nuevo usuario a la lista. Los datos se introducen desde la consola. El usuario no debe estar ya incluido en la lista.
-def incluir_usuario(lista):
+def crear_usuario(lista):
     new_email = introducir_email()
     if existe_email(lista, new_email): 
         print("\nYa existe un usuario en la lista con el email introducido.") # Ya existe un usuario con el email introducido
@@ -210,8 +218,8 @@ def actualizar_usuario(lista):
         while dato_valido == False:
             try:
                 update_nombre = input("\nIntroduzca el nombre del nuevo usuario: ").strip().lower()
-                update_edad = int(input("\nIntroduzca la edad del nuevo usuario: ")) # Pendiente comprobar que los caracteres introducidos se puedan transformar a entero.
-                update_altura = float(input("\nIntroduzca la altura del nuevo usuario, en metros. Por favor, utilice el punto decimal: ")) # Pendiente comprobar que los caracteres introducidos se puedan transformar a flotante.
+                update_edad = int(input("\nIntroduzca la edad del nuevo usuario: "))
+                update_altura = float(input("\nIntroduzca la altura del nuevo usuario, en metros. Por favor, utilice el punto decimal: "))
                 update_estudiante = introducir_estudiante()
             except ValueError:
                 print("\nEl valor introducido no es un número válido." )
@@ -222,6 +230,30 @@ def actualizar_usuario(lista):
         lista.insert(indice_5, update_user)
         print("\nDatos actualizados correctamente.\n")
 
+# Función que, a partir de un email, elimina de la lista el usuario asociado a dicho email.
+def eliminar_usuario(lista):
+    del_user_email = introducir_email()
+    if existe_email(lista, del_user_email) == False: # El usuario asociado al email introducido no existe.
+        print("\nEl email introducido no corresponde a ningún usuario de la lista.\n")
+    else:
+        indice_6 = buscar_usuario_por_email(lista, del_user_email)
+        lista.pop(indice_6)
+        print("\nUsuario eliminado correctamente.")
+        
+# Función para eliminar todos los usuario de la lista.
+def eliminar_lista(lista):
+    imprimir_menu(opciones_submenu_eliminar_lista)
+    sub_opcion_7 = seleccionar_opcion(opciones_submenu_eliminar_lista)
+    match sub_opcion_7:
+        case 1: # Eliminar lista.
+            lista.clear()
+            print("\nLista eliminada correctamente.\n")
+        case 2: # No eliminar la lista y salir al Menú Principal.
+            pass
+        case 3: # Salir de la ejecución del programa.
+            print("\nHasta pronto.\n")
+            exit()
+    
 # ---------- BLOQUE PRINCIPAL DEL PROGRAMA ----------
 
 lista = crear_lista_inicial()
@@ -241,15 +273,16 @@ while True:
             imprimir_usuario_por_email(lista)
                 
         case 4: # Crea un nuevo usuario y se añade a la lista
-            incluir_usuario(lista)
+            crear_usuario(lista)
                             
         case 5: # Actualizar datos de un usuario existente. Dado que se utiliza el email como clave única, el email no puede modificarse. En caso de actualizarse el email, se deberá eliminar el usuario en cuestión y crear un nuevo usuario con los datos actualizados.
             actualizar_usuario(lista)
         
-        case 6:
-            pass
-        case 7:
-            pass
+        case 6: # Se elimina un usuario a partir de su email asociado.
+            eliminar_usuario(lista)
+
+        case 7: # Se elimina la lista completa de usuarios.
+            eliminar_lista(lista)
         
         case 8:
             print ("\n", "Hasta pronto.", "\n")
