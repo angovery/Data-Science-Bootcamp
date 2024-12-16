@@ -185,10 +185,14 @@ def imprimir_usuarios_ordenados_edad(lista_users, opciones_submenu):
     match sub_opcion:
         case 1: # Orden ascendente
             lista_ascendente_edad = sorted(lista_users, key = lambda asc : asc.edad, reverse = False)
-            imprimir_lista(lista_ascendente_edad)
+            lista_users = lista_ascendente_edad.copy()
+            imprimir_lista(lista_users)
+            #imprimir_lista(lista_ascendente_edad)
         case 2: # Orden descendente
             lista_descendente_edad = sorted(lista_users, key = lambda desc : desc.edad, reverse = True)
-            imprimir_lista(lista_descendente_edad)
+            lista_users = lista_descendente_edad.copy()
+            imprimir_lista(lista_users)
+            # imprimir_lista(lista_descendente_edad)
         case 3: # Volver al menu principal
             pass
         case 4: # Salir
