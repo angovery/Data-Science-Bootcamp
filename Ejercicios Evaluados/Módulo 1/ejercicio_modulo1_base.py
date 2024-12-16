@@ -1,5 +1,8 @@
 # Ejercicio Nº1 - Módulo 1
 
+import re # Módulo de Expresiones Regulares, para validción del formato del email.
+
+
 class Usuario:
 # Declaración de la clase Usuario
     
@@ -103,9 +106,9 @@ def imprimir_lista(lista):
     print("\n")
 
 # Función que valida si un email tiene el formato correcto.
-# Sólo considera válido el email si se ha incluido una '@'. No se hace ningún otro tipo de validación.
 def email_validar_formato(email):
-    return ("@" in email)
+    patron = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$' # Expresión Regular para validar un email.
+    return re.match(patron, email) is not None
 
 # Función que comprueba si existe un email en una lista de elementos de tipo Usuario. El email ha de tener un formato correcto.
 def existe_email(lista, email):
@@ -177,6 +180,7 @@ def crear_usuario(lista):
                 dato_valido = True
         new_user = Usuario(new_nombre, new_email, new_edad, new_altura, new_estudiante)
         lista.append(new_user)
+        print("\nUsuario creado correctamente.\n")
 
 # Función que imprime los usuarios de una lista, ordenados por edad de menor a mayor o viceversa. Toma como entrada una lista de elementos de tipo usuario y una lista de opciones de un submenu de elección ASC o DESC.
 def imprimir_usuarios_ordenados_edad(lista_users, opciones_submenu):
