@@ -2,9 +2,35 @@
 
 import ejercicio_modulo1_menus as menu
 import ejercicio_modulo1_usuario_crud as crud
+import csv
 
-lista = crud.crear_lista_inicial()
-crud.imprimir_lista(lista)
+def leer_fichero_usuarios(fichero_csv):
+    try:
+        with open(fichero_csv, mode = "r", encoding= "utf-8") as file:
+            lineas = csv.reader(fichero_csv)
+            lista_usuarios = []
+            for linea in lineas:
+                new_nombre = str(linea[0]).strip().lower()
+                new_email = str(linea[1]).strip().lower()
+                new_edad = int(linea[2].strip())
+                new_altura = float(linea[3].strip())
+                new_estudiante = str(linea[4]).strip().capitalize()
+                usuario = Usuario(new_nombre, new_email, new_edad, new_altura, new_estudiante)
+                lista_usuarios.append(usuario)                
+    except FileNotFoundError:
+        print(f"\nNo se encuentra el archivo especificado: {fichero}\nPor favor, revise si existe el fichero en la ubicación del archivo ejecutable del programa y vuelva a ejecutar el programa.\n")
+        exit()
+    except Exception as e:
+        print (f"\nSe ha producido un error inesperado: {e}\n")
+    else:
+        return lista_usuarios
+        
+        
+
+fichero = "usuarios.csv"
+lista = leer_fichero_usuarios(fichero)
+#lista = crud.crear_lista_inicial()
+#crud.imprimir_lista(lista)
 crud.imprimir_menu(menu.opciones_menu_principal)
 
 while True:
