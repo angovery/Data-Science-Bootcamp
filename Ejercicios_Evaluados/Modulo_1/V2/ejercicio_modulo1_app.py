@@ -1,21 +1,23 @@
 # Archivo principal de la aplicación
 
+import csv
+import os
 import ejercicio_modulo1_menus as menu
 import ejercicio_modulo1_usuario_crud as crud
-import csv
 
 def leer_fichero_usuarios(fichero_csv):
+    lista_usuarios = []
+    print(f"Directorio de trabajo actual: {os.getcwd()}")
     try:
         with open(fichero_csv, mode = "r", encoding= "utf-8") as file:
-            lineas = csv.reader(fichero_csv)
-            lista_usuarios = []
+            lineas = csv.reader(file)
             for linea in lineas:
                 new_nombre = str(linea[0]).strip().lower()
                 new_email = str(linea[1]).strip().lower()
                 new_edad = int(linea[2].strip())
                 new_altura = float(linea[3].strip())
                 new_estudiante = str(linea[4]).strip().capitalize()
-                usuario = Usuario(new_nombre, new_email, new_edad, new_altura, new_estudiante)
+                usuario = crud.Usuario(new_nombre, new_email, new_edad, new_altura, new_estudiante)
                 lista_usuarios.append(usuario)                
     except FileNotFoundError:
         print(f"\nNo se encuentra el archivo especificado: {fichero}\nPor favor, revise si existe el fichero en la ubicación del archivo ejecutable del programa y vuelva a ejecutar el programa.\n")
@@ -27,7 +29,7 @@ def leer_fichero_usuarios(fichero_csv):
         
         
 
-fichero = "usuarios.csv"
+fichero = '\Ejercicios_Evaluados\Modulo_1\V2\usuarios.csv'
 lista = leer_fichero_usuarios(fichero)
 #lista = crud.crear_lista_inicial()
 #crud.imprimir_lista(lista)
