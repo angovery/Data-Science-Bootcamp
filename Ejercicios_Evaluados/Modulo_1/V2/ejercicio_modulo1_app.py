@@ -35,5 +35,5 @@ while True:
         
         case 8:
             file.actualizar_fichero(fichero,lista) # En tiempo de ejecución, la lista de usuarios se puede haber modificado o eliminado algún elemento. Este paso sobreescribe en el fichero csv la lista actualizda de usuarios. Este paso, podría sustituir a la adicción en el fichero de un nuevo usuario del caso 5.
-            print ("\n", "Hasta pronto.", "\n")
+            print ("Hasta pronto.", "\n")
             break
