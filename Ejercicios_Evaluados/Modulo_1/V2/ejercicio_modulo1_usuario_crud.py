@@ -3,6 +3,7 @@
 import re # Módulo de Expresiones Regulares, para validción del formato del email.
 import ejercicio_modulo1_usuario as user
 import ejercicio_modulo1_menus as menu
+import ejercicio_modulo1_ficheros as file
 
 # Función para imprimir un menú
 def imprimir_menu(lista_opciones):
@@ -114,7 +115,7 @@ def introducir_estudiante():
             print('\nPor favor, introduzca sólamente "True" o "False"')
             
 # Función para añadir un nuevo usuario a la lista. Los datos se introducen desde la consola. El usuario no debe estar ya incluido en la lista.
-def crear_usuario(lista):
+def crear_usuario(lista, fichero_csv):
     new_email = introducir_email()
     if existe_email(lista, new_email): 
         print("\nYa existe un usuario en la lista con el email introducido.") # Ya existe un usuario con el email introducido
@@ -133,6 +134,7 @@ def crear_usuario(lista):
         new_user = user.Usuario(new_nombre, new_email, new_edad, new_altura, new_estudiante)
         lista.append(new_user)
         print("\nUsuario creado correctamente.\n")
+        file.incluir_usuario_fichero(fichero_csv, new_user)
 
 # Función que imprime los usuarios de una lista, ordenados por edad de menor a mayor o viceversa. Toma como entrada una lista de elementos de tipo usuario y una lista de opciones de un submenu de elección ASC o DESC.
 def imprimir_usuarios_ordenados_edad(lista_users, opciones_submenu):

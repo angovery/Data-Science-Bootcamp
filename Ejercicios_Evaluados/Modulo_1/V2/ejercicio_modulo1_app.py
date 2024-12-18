@@ -22,8 +22,8 @@ while True:
             crud.imprimir_usuario_por_email(lista)
                 
         case 4: # Crea un nuevo usuario y se añade a la lista
-            crud.crear_usuario(lista)
-                            
+            crud.crear_usuario(lista, fichero)
+                                        
         case 5: # Actualizar datos de un usuario existente. Dado que se utiliza el email como clave única, el email no puede modificarse. En caso de actualizarse el email, se deberá eliminar el usuario en cuestión y crear un nuevo usuario con los datos actualizados.
             crud.actualizar_usuario(lista)
         
@@ -34,5 +34,6 @@ while True:
             crud.eliminar_lista(lista)
         
         case 8:
+            file.actualizar_fichero(fichero,lista) # En tiempo de ejecución, la lista de usuarios se puede haber modificado o eliminado algún elemento. Este paso sobreescribe en el fichero csv la lista actualizda de usuarios.
             print ("\n", "Hasta pronto.", "\n")
             break
