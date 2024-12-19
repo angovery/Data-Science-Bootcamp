@@ -16,7 +16,7 @@ while True:
             crud.imprimir_lista(lista)
             
         case 2: # Imprimir los usuarios ordenados por edad, ascendente o descendentemente.
-            crud.imprimir_usuarios_ordenados_edad(lista, menu.opciones_submenu_lista_ordenada)
+            crud.imprimir_usuarios_ordenados_edad(fichero, lista, menu.opciones_submenu_lista_ordenada)
                 
         case 3: # Buscar usuario por email
             crud.imprimir_usuario_por_email(lista)

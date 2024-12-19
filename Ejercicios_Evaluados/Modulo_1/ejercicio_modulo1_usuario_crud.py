@@ -129,7 +129,7 @@ def crear_usuario(lista, fichero_csv):
         file.incluir_usuario_fichero(fichero_csv, new_user)
 
 # Función que imprime los usuarios de una lista, ordenados por edad de menor a mayor o viceversa. Toma como entrada una lista de elementos de tipo usuario y una lista de opciones de un submenu de elección ASC o DESC.
-def imprimir_usuarios_ordenados_edad(lista_users, opciones_submenu):
+def imprimir_usuarios_ordenados_edad(fichero_csv, lista_users, opciones_submenu):
     imprimir_menu(opciones_submenu)
     sub_opcion = seleccionar_opcion(opciones_submenu)
     match sub_opcion:
@@ -146,6 +146,7 @@ def imprimir_usuarios_ordenados_edad(lista_users, opciones_submenu):
         case 3: # Volver al menu principal
             pass
         case 4: # Salir
+            file.actualizar_fichero(fichero_csv,lista_users)
             print ("\n", "Hasta pronto.", "\n")
             exit()  
 
