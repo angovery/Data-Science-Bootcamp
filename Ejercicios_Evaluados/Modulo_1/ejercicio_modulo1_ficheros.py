@@ -1,21 +1,33 @@
 # Módulo con funciones de tratamiento de ficheros con elementos de usuarios.
 
+from datetime import datetime, date
 import csv
 import ejercicio_modulo1_usuario as user
+import ejercicio_modulo1_usuario_crud as crud
 
+# Función que toma una fecha (de cumpleaños) en formato DD/MM/AAAA, de tipo string. Devuelve la edad actual, de tipo int.
+def calcular_edad_actual(fecha_cumple):
+    fecha = datetime.strptime(fecha_cumple, "%d/%m/%Y").date()
+    fecha_actual = date.today()
+    diferencia = fecha_actual - fecha
+    diferencia_en_anos = int(diferencia.days / 365)
+    return diferencia_en_anos
+    
+
+# Función que se encarga de leer los datos de un archivo externo csv, que contiene datos de un objeto de tipo Usuario. Devuelve una lista cuyos elementos son objetos de tipo Usuario.
 def leer_fichero_usuarios(fichero_csv):
     lista_usuarios = []
-    #print(f"Directorio de trabajo actual: {os.getcwd()}")
     try:
         with open(fichero_csv, mode = "r", encoding= "utf-8") as file:
             lineas = csv.reader(file)
             for linea in lineas:
                 new_nombre = str(linea[0]).strip().lower()
                 new_email = str(linea[1]).strip().lower()
-                new_edad = int(linea[2].strip())
-                new_altura = float(linea[3].strip())
-                new_estudiante = str(linea[4]).strip().capitalize()
-                usuario = user.Usuario(new_nombre, new_email, new_edad, new_altura, new_estudiante)
+                new_fecha_nacimiento = str(linea[2]).strip()
+                new_edad = calcular_edad_actual(new_fecha_nacimiento) # La edad se calcula en base a la fecha de nacimiento.
+                new_altura = float(linea[4].strip())
+                new_estudiante = str(linea[5]).strip().capitalize()
+                usuario = user.Usuario(new_nombre, new_email, new_fecha_nacimiento, new_edad, new_altura, new_estudiante)
                 lista_usuarios.append(usuario)                
     except FileNotFoundError:
         print(f"\nNo se encuentra el archivo especificado: {fichero_csv}\nPor favor, revise si existe el fichero en la ubicación del archivo ejecutable del programa y vuelva a ejecutar el programa.\n")
@@ -35,7 +47,9 @@ def incluir_usuario_fichero (fichero_csv, usuario):
             lista.append(new_nombre)
             new_email = str(usuario.email).strip().lower()
             lista.append(new_email)
-            new_edad = str(usuario.edad).strip().lower()
+            new_date = str(usuario.fecha_nacimiento).strip().lower()
+            lista.append(new_date)
+            new_edad = str(calcular_edad_actual(new_date)).strip()
             lista.append(new_edad)
             new_altura = str(usuario.altura).strip().lower()
             lista.append(new_altura)
@@ -57,7 +71,7 @@ def actualizar_fichero (fichero_csv, lista_usuarios):
         with open(fichero_csv, mode = "w", newline = '\n', encoding= "utf-8") as file:
             escribe_lista = csv.writer(file)
             for usuario in lista_usuarios:
-                escribe_lista.writerow([usuario.nombre, usuario.email, usuario.edad, usuario.altura, usuario.estudiante])    
+                escribe_lista.writerow([usuario.nombre, usuario.email, usuario.fecha_nacimiento, usuario.edad, usuario.altura, usuario.estudiante])    
     except FileNotFoundError:
         print(f"\nNo se encuentra el archivo especificado: {fichero_csv}\nPor favor, revise si existe el fichero en la ubicación del archivo ejecutable del programa y vuelva a ejecutar el programa.\n")
         exit()

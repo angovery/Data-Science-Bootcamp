@@ -1,6 +1,7 @@
 # Archivo para la definición de las funciones de la aplicación.
 
-import re # Módulo de Expresiones Regulares, para validción del formato del email.
+import re # Módulo de Expresiones Regulares, para validación del formato del email.
+from datetime import datetime
 import ejercicio_modulo1_usuario as user
 import ejercicio_modulo1_menus as menu
 import ejercicio_modulo1_ficheros as file
@@ -27,27 +28,17 @@ def seleccionar_opcion(lista_opciones):
             else:
                 valido = True
     return opcion
-    
-# Función para crear ina lista de usuarios inicial. Devuelve una lista de elementos de tipo Usuario
-def crear_lista_inicial():   
-    # Se definen los usuarios de base.
-    user1 = user.Usuario("Jose", "jose@nttdata.com", 49, 1.83, True)
-    user2 = user.Usuario("Juan", "juan@nttdata.com", 39, 1.95, True)
-    user3 = user.Usuario("Aaron", "aaron@google.com", 26, 1.74, False)
-    user4 = user.Usuario("Borja", "borja@microsoft.com", 51, 1.67, False)
 
-    # Se crea una lista de usuarios.
-    usuarios = [user1, user2, user3, user4]
-    return usuarios
-
-"""
-usuarios = [
-    Usuario("Jose", "jose@nttdata.com", "49", "1.83", True)
-    Usuario("Juan", "juan@nttdata.com", "39", "1.95", True)
-    Usuario("Aaron", "aaron@google.com", "26", "1.74", False)
-    Usuario("Borja", "borjae@microsoft.com", "51", "1.67", False)    
-]
-"""
+# Función para leer fechas en un formato estandarizado. Devuelve un valor de tipo string.
+def leer_fecha():
+    while True:
+        fecha_string = input("\nIntroduce la fecha del cumpleaños, en formato DD/MM/AAAA: ")
+        try:
+            fecha_date = datetime.strptime(fecha_string, "%d/%m/%Y").date()
+            return fecha_date.strftime("%d/%m/%Y")
+        except ValueError:
+            print("Formato de fecha no válido. Por favor, inténtalo de nuevo.")
+            
 # Función para imprimir una lista cuyos elementos son de tipo Usuario (valdría igualmente cualquier tipo de elemento). La lista debe existir.
 def imprimir_lista(lista):
     print("\n")
@@ -124,14 +115,15 @@ def crear_usuario(lista, fichero_csv):
         while dato_valido == False:
             try:
                 new_nombre = input("\nIntroduzca el nombre del nuevo usuario: ").strip().lower()
-                new_edad = int(input("\nIntroduzca la edad del nuevo usuario: ")) # Pendiente comprobar que los caracteres introducidos se puedan transformar a entero.
-                new_altura = float(input("\nIntroduzca la altura del nuevo usuario, en metros. Por favor, utilice el punto decimal: ")) # Pendiente comprobar que los caracteres introducidos se puedan transformar a flotante.
+                new_date = leer_fecha()
+                new_edad = file.calcular_edad_actual(new_date)
+                new_altura = float(input("\nIntroduzca la altura del nuevo usuario, en metros. Por favor, utilice el punto decimal: "))
                 new_estudiante = introducir_estudiante()
             except ValueError:
                 print("\nEl valor introducido no es un número válido." )
             else:
                 dato_valido = True
-        new_user = user.Usuario(new_nombre, new_email, new_edad, new_altura, new_estudiante)
+        new_user = user.Usuario(new_nombre, new_email, new_date, new_edad, new_altura, new_estudiante)
         lista.append(new_user)
         print("\nUsuario creado correctamente.\n")
         file.incluir_usuario_fichero(fichero_csv, new_user)
@@ -180,14 +172,15 @@ def actualizar_usuario(lista):
         while dato_valido == False:
             try:
                 update_nombre = input("\nIntroduzca el nombre del nuevo usuario: ").strip().lower()
-                update_edad = int(input("\nIntroduzca la edad del nuevo usuario: "))
+                update_date = leer_fecha()
+                update_edad = file.calcular_edad_actual(update_date)
                 update_altura = float(input("\nIntroduzca la altura del nuevo usuario, en metros. Por favor, utilice el punto decimal: "))
                 update_estudiante = introducir_estudiante()
             except ValueError:
                 print("\nEl valor introducido no es un número válido." )
             else:
                 dato_valido = True
-        update_user = user.Usuario(update_nombre, update_email, update_edad, update_altura, update_estudiante)
+        update_user = user.Usuario(update_nombre, update_email, update_date, update_edad, update_altura, update_estudiante)
         lista.pop(indice_5)
         lista.insert(indice_5, update_user)
         print("\nDatos actualizados correctamente.\n")

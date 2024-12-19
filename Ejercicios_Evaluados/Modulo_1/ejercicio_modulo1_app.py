@@ -5,7 +5,7 @@ import ejercicio_modulo1_usuario_crud as crud
 import ejercicio_modulo1_ficheros as file
      
 
-fichero = './Ejercicios_Evaluados/Modulo_1/V2/usuarios.csv'
+fichero = './Ejercicios_Evaluados/Modulo_1/usuarios.csv'
 lista = file.leer_fichero_usuarios(fichero)
 
 while True:
