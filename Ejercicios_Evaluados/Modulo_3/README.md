@@ -1,5 +1,3 @@
-## EJERCICIO MÓDULO 3:
-
 Uso de Pandas y Seaborn + algún gráfico de Plotly.
 
 Dataset: diamonds.
@@ -12,19 +10,28 @@ IMPORTANTE: cargar el dataset desde CSV desde la carpeta Data porque tendrá nul
     * Limpieza de valores error: 
         * hay columnas que tienen un valor '?', por tanto se deben reemplazar por un valor nan.
 
-    * Cambio de tipo de dato: .astype() a numéricos y textos, por ejemplo a categorical y carat a float32 o float16
+    * En las columnas x, y, z si el valor es cero ponerlo a nan para luego imputarlo
 
     * Limpieza de nulos (limpiar valores NaN):
         * Nulos en columnas continuas: mediana, media
         * Nulos en columnas categóricas: moda, un valor fijo
+
+    * Cambio de tipo de dato: .astype() a numéricos y textos, por ejemplo a categorical y carat a float32 o float16
+
+    * Borrado de duplicados: drop_duplicates()
 
     * Encoding: texto a numérico
         * Uso de la función get_dummies() para encoding one_hot
         * Uso de map para encoding ordinal para la columna cut como una nueva columna cut_int: 1, 2, 3, 4
 
 * PARTE 2: 25 % transformaciones:
-    * Uso de función apply:
-        * crear una columna price_iva a partir de la columna price que muestre el precio + IVA (21%)
+    * Crear una columna price_iva a partir de la columna price que muestre el precio + IVA (21%). 
+        * Ejemplo df['price'] * 1.21 
+
+    * Crear una columna price_discount usando apply a partir de la columna price(con lambda o def):
+        * price < 1000 and cut == 'Ideal' entonces 10 % descuento
+        * 1000 <= price <= 5000 and cut == 'Premium' entonces 15 % descuento
+        * si no entra en las condiciones sin descuento, devolver el precio original
 
     * Crear una nueva columna volumen combinando: x * y * z
 
@@ -38,9 +45,9 @@ IMPORTANTE: cargar el dataset desde CSV desde la carpeta Data porque tendrá nul
 
 * Outliers: Visualización Q1 y Q3 y calcular límites tukey y filtrar. Sobre la columna precio.
 
-* asimetría, curtosis y transformar datos con logaritmo o raíz cuadrada
+* asimetría, curtosis y transformar datos con logaritmo o raíz cuadrada, aplicar sobre precio, visualizar el histograma y/o boxplot por tipo de corte. Opcional ajustar la escala.
 
-* Discretizar la columna precio por barato, medio, caro usando la función pd.cut
+* Discretizar la columna precio en 3-4 opciones por barato, medio, caro usando la función pd.cut
 
 
 * PARTE 4: 30 % visualizaciones:
@@ -58,7 +65,3 @@ IMPORTANTE: cargar el dataset desde CSV desde la carpeta Data porque tendrá nul
     * Combinarlas con:
         * hue, style, size, row, col usando un relplot
         * filtro
-
-Domingo 19/01 23:59 fecha entrega.
-
-* m3_nombre_apellido.ipynb
