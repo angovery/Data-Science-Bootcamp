@@ -2,7 +2,7 @@
 
 OBJETIVOS: 
 - Regresión de la columna 'price'.
-- Clasificación de la columna 'cat'.
+- Clasificación de la columna 'cut'.
 
 Dataset: diamonds
 
