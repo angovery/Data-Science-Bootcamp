@@ -16,7 +16,7 @@ Dataset: diamonds
 
 * PARTE 4 (10 %) Gridsearch con CrossValidation sobre cualquiera de los pipelines
 
-Los modelos, se puede utilizar RandomForest para los dos por ejemplo o el que se quiera. Ejemplo RandomForestRegressor para regresión y MultiLayerPerceptronClassifier para clasificación.
+Los modelos, se puede utilizar RandomForest para los dos por ejemplo o el que se quiera. Ejemplo RandomForestRegressor para regresión y MultilayerPerceptronClassifier para clasificación.
 
 m6_nombre_apellido.ipynb
 
