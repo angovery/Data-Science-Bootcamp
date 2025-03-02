@@ -3,7 +3,7 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-# Se carga el modelo y el label_encoder en la caché, para minimizar tiempos de espera en consultas posteriores.
+# Se carga el modelo y el label_encoder en la caché, para minimizar tiempos de espera en consultas posteriores
 @st.cache_resource(show_spinner='Cargando el modelo de clasificación...')
 def load_classification_label_model():
     model = joblib.load("Models/pipeline_clasificacion.joblib")

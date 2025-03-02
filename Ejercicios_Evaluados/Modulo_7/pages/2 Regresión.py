@@ -3,7 +3,7 @@ import pandas as pd
 import joblib
 import numpy as np
 
-# Se carga el modelo y el label_encoder en la caché, para minimizar tiempos de espera en consultas posteriores.
+# Se carga el modelo y el label_encoder en la caché, para minimizar tiempos de espera en consultas posteriores
 @st.cache_resource(show_spinner='Cargando el modelo de regresión...')
 def load_regression_model():
     model = joblib.load("Models/pipeline_regresion.joblib")

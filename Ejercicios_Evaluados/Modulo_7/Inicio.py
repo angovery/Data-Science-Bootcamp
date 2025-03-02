@@ -1,6 +1,7 @@
 # Home.py
 import streamlit as st
 
+# Página principal.
 st.set_page_config(page_title="Diamonds Analysis", layout="wide")
 
 st.title("Análisis del Dataset 'Diamonds'")
