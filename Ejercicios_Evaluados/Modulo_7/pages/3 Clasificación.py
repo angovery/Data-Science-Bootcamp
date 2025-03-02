@@ -3,7 +3,7 @@ import streamlit as st
 import pandas as pd
 import joblib
 
-# Se carga el modelo y el label_encoder en la caché, para minimizar tiempos de espera en consultas posteriores
+# Se carga el modelo y el label_encoder en la caché, para minimizar tiempos de espera en consultas posteriores.
 @st.cache_resource(show_spinner='Cargando el modelo de clasificación...')
 def load_classification_label_model():
     model = joblib.load("Models/pipeline_clasificacion.joblib")
@@ -31,7 +31,7 @@ clarity_options = ['I1', 'SI2', 'SI1', 'VS2', 'VS1', 'VVS2', 'VVS1', 'IF', 'FL']
 color = st.selectbox("Color", color_options)
 clarity = st.selectbox("Clarity", clarity_options)
 
-if st.button("Predecir variable 'cut'"):
+if st.button("Predecir corte"):
     # Se genera el DataFrame con los datos de entrada.
     input_data = pd.DataFrame({
         'carat': [carat],
