@@ -48,4 +48,4 @@ if st.button("Predecir corte"):
     # Se decodifica el valor numérico de la prediccióm para mostrar el valor asociado de los posibles valores de la variable.
     etiqueta_predicha = label_encoder.inverse_transform(prediccion)
     # Mostrar el resultado.
-    st.write("El corte predicho es:", etiqueta_predicha[0])
+    st.metric("El corte predicho es:", etiqueta_predicha[0])
