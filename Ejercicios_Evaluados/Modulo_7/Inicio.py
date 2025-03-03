@@ -15,7 +15,7 @@ def load_data():
 
 df = load_data()
 
-# Se almacena el DataFrame en session_state, para poder compartirlo entre las diferentes páginas de la aplicación
+# Se almacena el DataFrame en session_state, para poder compartirlo entre las diferentes páginas de la aplicación.
 st.session_state['df'] = df
 
 st.title("Análisis del Dataset 'Diamonds'")
