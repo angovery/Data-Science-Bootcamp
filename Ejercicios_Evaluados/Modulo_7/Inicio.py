@@ -2,7 +2,7 @@
 import streamlit as st
 
 # Página principal.
-st.set_page_config(page_title="Diamonds Analysis", layout="wide")
+st.set_page_config(page_title="Analisis DataFrame 'Diamonds'", layout="wide")
 
 st.title("Análisis del Dataset 'Diamonds'")
 st.markdown("""
@@ -11,3 +11,16 @@ Esta aplicación realiza un análisis exploratorio del famoso dataset **diamonds
 - Realizar predicciones de precio mediante un modelo de regresión.
 - Predecir la categoría del corte de los diamantes mediante un modelo de clasificación.
 """)
+col1, col2, col3 = st.columns(3)
+
+with col1:
+    if st.button("EDA's"):
+        st.switch_page('pages/1_EDAs.py')
+
+with col2:
+    if st.button("Regresión"):
+        st.switch_page('pages/2_Regresion.py')
+        
+with col3:
+    if st.button("Clasificación"):
+        st.switch_page('pages/3_Clasificacion.py')
