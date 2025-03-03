@@ -4,16 +4,20 @@ import pandas as pd
 import joblib
 import numpy as np
 
-# Carga del DataSet.
-ruta = 'https://raw.githubusercontent.com/mwaskom/seaborn-data/refs/heads/master/diamonds.csv'
+
 # Se carga el modelo y el label_encoder en la caché, para minimizar tiempos de espera en consultas posteriores.
-@st.cache_resource(show_spinner='Cargando el modelo de regresión y DataFrame...')
+@st.cache_resource(show_spinner='Cargando el modelo de regresión...')
 def load_data_regresion():
     model = joblib.load("Models/pipeline_regresion.joblib")
-    df = pd.read_csv(ruta)
-    return model, df
+    return model
 
-modelo_regresion, df = load_data_regresion()
+modelo_regresion = load_data_regresion()
+
+# Carga del DataSet.
+if 'df' not in st.session_state:
+    st.error('El DataFrame no se encuentra disponible. por favor, vuelve a cargar la página de Inicio.')
+else:
+    df = st.session_state['df']
 
 if st.button('Volver a inicio'): # opcional poder volver a inicio
     st.switch_page('Inicio.py')
