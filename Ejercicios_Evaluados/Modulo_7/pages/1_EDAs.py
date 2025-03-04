@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 if 'df' not in st.session_state:
     st.error('El DataFrame no se encuentra disponible. por favor, vuelve a cargar la página de Inicio.')
 else:
-    df = st.session_state['df'] # Carga del DataSet.
+    df = st.session_state['df'] # Se carga el DataSet.
 
     # Botón para volver a inicio.
     if st.button('Volver a inicio'):

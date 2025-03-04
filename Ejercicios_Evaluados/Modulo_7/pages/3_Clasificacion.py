@@ -2,8 +2,11 @@
 import streamlit as st
 st.set_page_config(page_title="Modelo de Clasificación - Diamonds", layout="wide")
 import pandas as pd
-import joblib
+import os
 
+if 'prediccion_cla_generada' not in st.session_state:
+    st.session_state['prediccion_cla_generada'] = False      # Se inicializa la variable que controla si se ha realizado alguna predicción en la sesión actual.
+    
 if 'df' not in st.session_state:
     st.error('El DataFrame no se encuentra disponible. por favor, vuelve a cargar la página de Inicio.')
 else:
@@ -12,11 +15,11 @@ else:
     if ('model_cla' not in st.session_state) or ('label_encoder' not in st.session_state):
         st.error('El modelo de clasificación y/o el label_encoder no se encuentran disponibles. por favor, vuelve a cargar la página de Inicio.')
     else:   
-        # Se carga el modelo y el label_encoder en la caché, para minimizar tiempos de espera en consultas posteriores.
+        # Se carga el modelo y el label_encoder de la caché, para minimizar tiempos de espera en consultas posteriores.
         modelo_clasificacion = st.session_state['model_cla']
         label_encoder = st.session_state['label_encoder']
 
-        if st.button('Volver a inicio'): # opcional poder volver a inicio
+        if st.button('Volver a inicio'): # Botón para poder volver a inicio.
             st.switch_page('Inicio.py')
 
         st.title("Predicción de Cut - Clasificación")
@@ -59,7 +62,7 @@ else:
 
         if st.button("Predecir corte"):
             # Se genera el DataFrame con los datos de entrada.
-            input_data = pd.DataFrame({
+            datos_entrada = pd.DataFrame({
                 'carat': [carat],
                 'color': [color],
                 'clarity': [clarity],
@@ -70,8 +73,42 @@ else:
                 'z': [z],   
             })
             # Se genera la predicción.
-            prediccion = modelo_clasificacion.predict(input_data)
+            prediccion_cla = modelo_clasificacion.predict(datos_entrada)
             # Se decodifica el valor numérico de la prediccióm para mostrar el valor asociado de los posibles valores de la variable.
-            etiqueta_predicha = label_encoder.inverse_transform(prediccion)
-            # Mostrar el resultado.
+            etiqueta_predicha = label_encoder.inverse_transform(prediccion_cla)
+            # Se muestra el resultado.
             st.metric("El corte predicho es:", etiqueta_predicha[0])
+            
+            posicion_cut = datos_entrada.columns.get_loc('carat') + 1       # Se busca la posición seguida a la columna 'carat'.
+            datos_entrada.insert(loc = posicion_cut, column = 'cut', value = etiqueta_predicha) # Se añaden los datos de la predicción al DataFrame de entrada.
+            
+            # Para guardar los datos de las predicciones, se predice la variable 'price' con los datos de entrada y la predicción de 'cut'.
+            if 'model_reg' not in st.session_state:
+                st.write("No se ha cargado el modelo de regresión. Por favor, vuelva a cargar la página de Inicio")
+            else:
+                modelo_regresion = st.session_state['model_reg']
+                prediccion_reg = modelo_regresion.predict(datos_entrada)
+                posicion_price = datos_entrada.columns.get_loc('table') + 1
+                datos_entrada.insert(loc = posicion_price, column = 'price', value = prediccion_reg)
+            
+            if 'df_predicciones' not in st.session_state:                       # Si no se ha realizado ninguna predicción anterior, se añade la predicción al session_state.
+                st.session_state['df_predicciones'] = datos_entrada.copy()
+            else:
+                st.session_state['df_predicciones'] = pd.concat([st.session_state['df_predicciones'], datos_entrada], ignore_index=True)    # Se añade la predicción al session_state.
+            
+            st.session_state['prediccion_cla_generada'] = True      # Se cambia el flag, dado que ya se ha generado una predicción.
+        
+        if st.session_state['prediccion_cla_generada']:         # Si se ha generado alguna predicción durante la sesión actual, se muestra el botón de "Guardar..."
+            if st.button("Guardar predicciones en archivo"):
+                if 'df_predicciones' in st.session_state:
+                    os.makedirs('data', exist_ok=True)
+                    st.session_state['df_predicciones'].drop_duplicates(inplace = True)                 # Se eliminan duplicados de las predicciones antes de guardar los datos en el archivo.
+                    st.session_state['df_predicciones'].to_csv('data/predicciones.csv', index=False)
+                    st.session_state['prediccion_cla_generada'] = False 
+                    # st.experimental_rerun() # Por lo que he podido averiguar, para que desaparezca el botón de "Guardar..." tras guardar el archivo, hay que refrescar la carga de la página con esta función. Pero no he conseguido que funcione. No obstante, el botón desaparece cuando se interactúa con alguno de los elementos de la página.
+            
+        if 'df_predicciones' not in st.session_state:
+            st.write("No hay predicciones que mostrar.")
+        else:
+            st.header("Predicciones efectuadas.")
+            df_predicciones = st.data_editor(st.session_state['df_predicciones'], use_container_width=True)

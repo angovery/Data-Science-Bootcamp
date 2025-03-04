@@ -1,9 +1,12 @@
 import streamlit as st
 st.set_page_config(page_title="Modelo de Regresión - Diamonds", layout="wide")
 import pandas as pd
-import joblib
 import numpy as np
+import os
 
+if 'prediccion_reg_generada' not in st.session_state:
+    st.session_state['prediccion_reg_generada'] = False         # Se inicializa la variable que controla si se ha realizado alguna predicción en la sesión actual.
+  
 if 'df' not in st.session_state:
     st.error('El DataFrame no se encuentra disponible. por favor, vuelve a cargar la página de Inicio.')
 else:
@@ -12,10 +15,10 @@ else:
     if 'model_reg' not in st.session_state:
         st.error('El modelo de regresión no se encuentra disponible. por favor, vuelve a cargar la página de Inicio.')
     else:    
-        # Se carga el modelo y el label_encoder en la caché, para minimizar tiempos de espera en consultas posteriores.
+        # Se carga el modelo de la caché, para minimizar tiempos de espera en consultas posteriores.
         modelo_regresion = st.session_state['model_reg']
     
-        if st.button('Volver a inicio'): # opcional poder volver a inicio
+        if st.button('Volver a inicio'): # Botón para poder volver a inicio.
             st.switch_page('Inicio.py')
 
         st.title("Predicción de Precio - Regresión")
@@ -58,6 +61,7 @@ else:
                 color = st.selectbox("Color", color_options)
             with col3:
                 clarity = st.selectbox("Clarity", clarity_options)
+        df_auxiliar = pd.DataFrame()
             
         if st.button("Predecir Precio"):
             # Se genera el DataFrame con los datos de entrada.
@@ -74,5 +78,31 @@ else:
             })
             # Se genera la predicción.
             prediccion = modelo_regresion.predict(datos_entrada)
+            # Se muestra el resultado.
             st.metric(label="Predicción del precio", value=str(np.round(prediccion[0], 2)) + '$', delta=str(np.round(((prediccion[0] - df['price'].mean()) / df['price'].mean()) * 100, 2)) + "%",delta_color='normal')
             st.write('(Se muestra el porcentaje relativo con respecto al precio medio. Precio medio: ', np.round(df['price'].mean(), 2), '$)')
+            
+            posicion = datos_entrada.columns.get_loc('table') + 1 # Se busca la posición seguida a la columna 'table'.
+            datos_entrada.insert(loc = posicion, column = 'price', value = prediccion) # Se añaden los datos de la predicción al DataFrame de entrada.
+            
+            if 'df_predicciones' not in st.session_state:
+                st.session_state['df_predicciones'] = datos_entrada.copy() # Si no se ha realizado ninguna predicción anterior, se añade la predicción al session_state.
+            else:
+                st.session_state['df_predicciones'] = pd.concat([st.session_state['df_predicciones'], datos_entrada], ignore_index = True)  # Se añade la predicción al session_state.
+            
+            st.session_state['prediccion_reg_generada'] = True # Se cambia el flag, dado que ya se ha generado una predicción.
+            
+        if st.session_state['prediccion_reg_generada']: # Si se ha generado alguna predicción durante la sesión actual, se muestra el botón de "Guardar..."
+            if st.button("Guardar predicciones en archivo"):
+                if 'df_predicciones' in st.session_state:
+                    os.makedirs('data', exist_ok=True)
+                    st.session_state['df_predicciones'].drop_duplicates(inplace = True)                 # Se eliminan duplicados de las predicciones antes de guardar los datos en el archivo.
+                    st.session_state['df_predicciones'].to_csv('data/predicciones.csv', index=False)
+                    st.session_state['prediccion_reg_generada'] = False
+                    # st.experimental_rerun() # Por lo que he podido averiguar, para que desaparezca el botón de "Guardar..." tras guardar el archivo, hay que refrescar la carga de la página con esta función. Pero no he conseguido que funcione. No obstante, el botón desaparece cuando se interactúa con alguno de los elementos de la página.
+                
+        if 'df_predicciones' not in st.session_state:
+            st.write("No hay predicciones que mostrar.")
+        else:
+            st.header("Predicciones efectuadas.")
+            df_predicciones = st.data_editor(st.session_state['df_predicciones'], use_container_width=True)

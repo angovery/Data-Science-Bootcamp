@@ -4,24 +4,33 @@ import streamlit as st
 st.set_page_config(page_title="Analisis DataFrame 'Diamonds'", layout="wide")
 import pandas as pd
 import joblib
+import os
 
-# Carga del DataSet.
-ruta = 'https://raw.githubusercontent.com/mwaskom/seaborn-data/refs/heads/master/diamonds.csv'
-@st.cache_resource(show_spinner='Cargando el DataFrame...')
-def load_data():
-    df = pd.read_csv(ruta)
-    model_reg = joblib.load("Models/pipeline_regresion.joblib")
-    model_cla = joblib.load("Models/pipeline_clasificacion.joblib")
-    label_encoder = joblib.load("Models/label_encoder_clasificacion.joblib")
-    return df, model_reg, model_cla, label_encoder
+# Se cargan en la caché todos los datos que serán utilizados entre las diferentes páginas de la aplicación.
+# Los datos cargados, se almacenan en el diccionario 'session_state'.
+@st.cache_resource(show_spinner='Cargando datos...')
+def cargar_datos():
+    ruta_dataframe = 'data/diamonds.csv'                        # DataFrame principal.
+    ruta_df_predicciones = 'data/predicciones.csv'              # DataFrame con las predicciones generadas.
+    ruta_model_reg = 'models/pipeline_regresion.joblib'         # Modelo de regresión para predecir la columna 'price'.
+    ruta_model_cla = 'models/pipeline_clasificacion.joblib'     # Modelo de clasificación para predecir la columna 'cut'.
+    ruta_label_encoder = 'models/label_encoder_clasificacion.joblib'    # Mapeado de la columna 'cut'.
+    lista_rutas ={'df': ruta_dataframe, 'df_predicciones': ruta_df_predicciones,'model_reg': ruta_model_reg, 'model_cla': ruta_model_cla, 'label_encoder': ruta_label_encoder}
+    for archivo, ruta in lista_rutas.items():                   # Se recorre la lista, se van cargando los datos y almacenandol en session_state.
+        if os.path.exists(ruta):
+            try:
+                if ruta.endswith('.csv'):           # Los archivos .csv se cargan de forma diferente.
+                    st.session_state[archivo] = pd.read_csv(ruta)
+                    st.session_state[archivo].drop_duplicates(inplace = True) # Tras la carga, se eliminan las posibles filas duplicadas.
+                else:
+                    st.session_state[archivo] = joblib.load(ruta)   # Se cargan los archivos .joblib.
+            except Exception as e:
+                st.error(f"Error al cargar el archivo '{ruta}': {e}.")
+        else:
+            st.error(f"El archivo {archivo} no se encuentra en la ruta '{ruta}'.")
+    return
 
-df, model_reg, model_cla, label_encoder = load_data()
-
-# Se almacenan los datos cargados en session_state, para poder compartirlo entre las diferentes páginas de la aplicación.
-st.session_state['df'] = df
-st.session_state['model_reg'] = model_reg
-st.session_state['model_cla'] = model_cla
-st.session_state['label_encoder'] = label_encoder
+cargar_datos()
 
 st.title("Análisis del Dataset 'Diamonds'")
 st.markdown("""
