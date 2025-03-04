@@ -99,7 +99,7 @@ else:
                     st.session_state['df_predicciones'].drop_duplicates(inplace = True)                 # Se eliminan duplicados de las predicciones antes de guardar los datos en el archivo.
                     st.session_state['df_predicciones'].to_csv('data/predicciones.csv', index=False)
                     st.session_state['prediccion_reg_generada'] = False
-                    st.rerun() # Por lo que he podido averiguar, para que desaparezca el botón de "Guardar..." tras guardar el archivo, hay que refrescar la carga de la página con esta función. Pero no he conseguido que funcione. No obstante, el botón desaparece cuando se interactúa con alguno de los elementos de la página.
+                    st.rerun()
                 
         if 'df_predicciones' not in st.session_state:
             st.write("No hay predicciones que mostrar.")
