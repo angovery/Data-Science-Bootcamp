@@ -92,14 +92,17 @@ else:
             
             st.session_state['prediccion_reg_generada'] = True # Se cambia el flag, dado que ya se ha generado una predicción.
             
-        if st.session_state['prediccion_reg_generada']: # Si se ha generado alguna predicción durante la sesión actual, se muestra el botón de "Guardar..."
+        # Se decide que la aparición del botón "Guardar..." esté condicionada a que, previamente, se haya generado una predicción durante la sesión.
+        # Se podría haber sustituido el botón "Predecir..." por el botón "Guardar...", pero esto habría implicado la imposibilidad de guardar, de una sola vez, varias predicciones generadas durante la sesión.
+        # Si se sustituyera un botón por otro, se tendría que guardar, de forma individual, cada predicición generada durante la sesión.
+        if st.session_state['prediccion_reg_generada']:                                                 # Si se ha generado alguna predicción durante la sesión actual, se muestra el botón de "Guardar..."
             if st.button("Guardar predicciones en archivo"):
                 if 'df_predicciones' in st.session_state:
                     os.makedirs('data', exist_ok=True)
                     st.session_state['df_predicciones'].drop_duplicates(inplace = True)                 # Se eliminan duplicados de las predicciones antes de guardar los datos en el archivo.
                     st.session_state['df_predicciones'].to_csv('data/predicciones.csv', index=False)
-                    st.session_state['prediccion_reg_generada'] = False
-                    st.rerun()
+                    st.session_state['prediccion_reg_generada'] = False                                 # Se cambia el flag para ocultar el botón "Guardar..." hasta que se genere una nueva predicción.
+                    st.rerun()                                                                          # Se recarga la página para que los cambios surtan efecto.
                 
         if 'df_predicciones' not in st.session_state:
             st.write("No hay predicciones que mostrar.")
